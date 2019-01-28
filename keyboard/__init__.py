@@ -84,6 +84,7 @@ import itertools as _itertools
 import collections as _collections
 from threading import Thread as _Thread, Lock as _Lock
 import time as _time
+import datetime as _datetime
 # Python2... Buggy on time changes and leap seconds, but no other good option (https://stackoverflow.com/questions/1205722/how-do-i-get-monotonic-time-durations-in-python).
 _time.monotonic = getattr(_time, 'monotonic', None) or _time.time
 
@@ -1001,7 +1002,8 @@ def get_typed_strings(events, allow_backspace=True):
                 string = ''
     yield string
 
-_recording = None
+_
+= None
 def start_recording(recorded_events_queue=None):
     """
     Starts recording all keyboard events into a global variable, or the given
@@ -1011,7 +1013,8 @@ def start_recording(recorded_events_queue=None):
     """
     recorded_events_queue = recorded_events_queue or _queue.Queue()
     global _recording
-    _recording = (recorded_events_queue, hook(recorded_events_queue.put))
+    _recording = (recorded_events_queue, hook(recorded_events_queue.put),str(_datetime.datetime.now())
+)
     return _recording
 
 def stop_recording():
@@ -1022,9 +1025,9 @@ def stop_recording():
     global _recording
     if not _recording:
         raise ValueError('Must call "start_recording" before.')
-    recorded_events_queue, hooked = _recording
+    recorded_events_queue, hooked, timestamp = _recording
     unhook(hooked)
-    return list(recorded_events_queue.queue)
+    return list((recorded_events_queue.queue.timestamp))
 
 def record(until='escape', suppress=False, trigger_on_release=False):
     """
