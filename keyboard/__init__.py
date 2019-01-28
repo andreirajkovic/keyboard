@@ -1001,7 +1001,8 @@ def get_typed_strings(events, allow_backspace=True):
                 yield string
                 string = ''
     yield string
-    _recording = None
+
+_recording = None
 
 def start_recording(recorded_events_queue=None):
     """
