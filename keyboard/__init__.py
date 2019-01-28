@@ -1001,9 +1001,8 @@ def get_typed_strings(events, allow_backspace=True):
                 yield string
                 string = ''
     yield string
+    _recording = None
 
-_
-= None
 def start_recording(recorded_events_queue=None):
     """
     Starts recording all keyboard events into a global variable, or the given
