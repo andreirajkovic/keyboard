@@ -1013,8 +1013,7 @@ def start_recording(recorded_events_queue=None):
     """
     recorded_events_queue = recorded_events_queue or _queue.Queue()
     global _recording
-    _recording = (recorded_events_queue, hook(recorded_events_queue.put),str(_datetime.datetime.now())
-)
+    _recording = (recorded_events_queue, hook(recorded_events_queue.put),str(_datetime.datetime.now()))
     return _recording
 
 def stop_recording():
