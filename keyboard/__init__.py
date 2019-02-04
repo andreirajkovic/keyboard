@@ -1067,7 +1067,7 @@ def stop_recording():
         raise ValueError('Must call "start_recording" before.')
     recorded_events_queue, hooked = _recording
     unhook(hooked)
-    return list((recorded_events_queue.queue,timestamp))
+    return list((recorded_events_queue.queue))
 
 def record(until='escape', suppress=False, trigger_on_release=False):
     """
