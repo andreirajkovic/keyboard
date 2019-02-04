@@ -245,9 +245,10 @@ class _KeyboardListener(_GenericListener):
         # Update tables of currently pressed keys and modifiers.
         with _pressed_events_lock:
             if event_type == KEY_DOWN:
-                if is_modifier(scan_code): self.active_modifiers.add(scan_code)
+                if is_modifier(scan_code): 
+                    self.active_modifiers.add(scan_code)
+                    screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
                 _pressed_events[scan_code] = event
-                screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
             hotkey = tuple(sorted(_pressed_events))
             if event_type == KEY_UP:
                 self.active_modifiers.discard(scan_code)
