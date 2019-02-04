@@ -237,6 +237,7 @@ class _KeyboardListener(_GenericListener):
             return True
 
         if not all(hook(event) for hook in self.blocking_hooks):
+            screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
             return False
 
         event_type = event.event_type
@@ -276,7 +277,6 @@ class _KeyboardListener(_GenericListener):
                     origin = 'other'
 
             for key in sorted(modifiers_to_update):
-                screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
                 transition_tuple = (self.modifier_states.get(key, 'free'), event_type, origin)
                 should_press, new_accept, new_state = self.transition_table[transition_tuple]
                 if should_press: press(key)
