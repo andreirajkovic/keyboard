@@ -290,12 +290,12 @@ class _KeyboardListener(_GenericListener):
 
         # Queue for handlers that won't block the event.
         self.queue.put(event)
-        screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
 
         return accept
 
     def listen(self):
         _os_keyboard.listen(self.direct_callback)
+        screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
 
 _listener = _KeyboardListener()
 
