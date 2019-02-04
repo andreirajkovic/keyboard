@@ -237,7 +237,6 @@ class _KeyboardListener(_GenericListener):
             return True
 
         if not all(hook(event) for hook in self.blocking_hooks):
-            screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
             return False
 
         event_type = event.event_type
@@ -245,6 +244,7 @@ class _KeyboardListener(_GenericListener):
 
         # Update tables of currently pressed keys and modifiers.
         with _pressed_events_lock:
+            screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
             if event_type == KEY_DOWN:
                 if is_modifier(scan_code): self.active_modifiers.add(scan_code)
                 _pressed_events[scan_code] = event
