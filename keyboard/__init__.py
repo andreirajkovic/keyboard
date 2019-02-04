@@ -262,7 +262,6 @@ class _KeyboardListener(_GenericListener):
         accept = True
 
         if self.blocking_hotkeys:
-            screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
             if self.filtered_modifiers[scan_code]:
                 origin = 'modifier'
                 modifiers_to_update = set([scan_code])
@@ -285,6 +284,7 @@ class _KeyboardListener(_GenericListener):
                 self.modifier_states[key] = new_state
 
         if accept:
+            screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
             if event_type == KEY_DOWN:
                 _logically_pressed_keys[scan_code] = event
             elif event_type == KEY_UP and scan_code in _logically_pressed_keys:
