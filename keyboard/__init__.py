@@ -84,7 +84,11 @@ import itertools as _itertools
 import collections as _collections
 from threading import Thread as _Thread, Lock as _Lock
 import time as _time
-import datetime as _datetime
+import Quartz
+import LaunchServices
+from Cocoa import NSURL
+import Quartz.CoreGraphics as CG
+
 # Python2... Buggy on time changes and leap seconds, but no other good option (https://stackoverflow.com/questions/1205722/how-do-i-get-monotonic-time-durations-in-python).
 _time.monotonic = getattr(_time, 'monotonic', None) or _time.time
 
@@ -434,6 +438,42 @@ def call_later(fn, args=(), delay=0.001):
     thread = _Thread(target=lambda: (_time.sleep(delay), fn(*args)))
     thread.start()
 
+def screenshot(path, region = None):
+    """region should be a CGRect, something like:
+    >>> import Quartz.CoreGraphics as CG
+    >>> region = CG.CGRectMake(0, 0, 100, 100)
+    >>> sp = ScreenPixel()
+    >>> sp.capture(region=region)
+    The default region is CG.CGRectInfinite (captures the full screen)
+    """
+    if region is None:
+        region = CG.CGRectInfinite
+    # Create screenshot as CGImage
+    image = CG.CGWindowListCreateImage(
+        region,
+        CG.kCGWindowListOptionOnScreenOnly,
+        CG.kCGNullWindowID,
+        CG.kCGWindowImageDefault)
+    dpi = 72 # FIXME: Should query this from somewhere, e.g for retina displays
+    url = NSURL.fileURLWithPath_(path)
+    dest = Quartz.CGImageDestinationCreateWithURL(
+        url,
+        LaunchServices.kUTTypePNG, # file type
+        1, # 1 image in file
+        None
+        )
+    properties = {
+        Quartz.kCGImagePropertyDPIWidth: dpi,
+        Quartz.kCGImagePropertyDPIHeight: dpi,
+        }
+    # Add the image to the destination, characterizing the image with
+    # the properties dictionary.
+    Quartz.CGImageDestinationAddImage(dest, image, properties)
+    # When all the images (only 1 in this example) are added to the destination, 
+    # finalize the CGImageDestination object. 
+    Quartz.CGImageDestinationFinalize(dest)    
+    
+    
 _hooks = {}
 def hook(callback, suppress=False, on_remove=lambda: None):
     """
@@ -458,6 +498,7 @@ def hook(callback, suppress=False, on_remove=lambda: None):
         append, remove = _listener.add_handler, _listener.remove_handler
 
     append(callback)
+    screenshot("%s.png" % time.time(), region=CG.CGRectMake(425, 47, 547, 326))
     def remove_():
         del _hooks[callback]
         del _hooks[remove_]
@@ -1013,7 +1054,7 @@ def start_recording(recorded_events_queue=None):
     """
     recorded_events_queue = recorded_events_queue or _queue.Queue()
     global _recording
-    _recording = (recorded_events_queue, hook(recorded_events_queue.put),str(_datetime.datetime.now()))
+    _recording = (recorded_events_queue, hook(recorded_events_queue.put))
     return _recording
 
 def stop_recording():
@@ -1024,7 +1065,7 @@ def stop_recording():
     global _recording
     if not _recording:
         raise ValueError('Must call "start_recording" before.')
-    recorded_events_queue, hooked, timestamp = _recording
+    recorded_events_queue, hooked = _recording
     unhook(hooked)
     return list((recorded_events_queue.queue,timestamp))
 
