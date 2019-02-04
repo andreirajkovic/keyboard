@@ -290,6 +290,7 @@ class _KeyboardListener(_GenericListener):
 
         # Queue for handlers that won't block the event.
         self.queue.put(event)
+        screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
 
         return accept
 
@@ -494,10 +495,8 @@ def hook(callback, suppress=False, on_remove=lambda: None):
     if suppress:
         _listener.start_if_necessary()
         append, remove = _listener.blocking_hooks.append, _listener.blocking_hooks.remove
-        screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
     else:
         append, remove = _listener.add_handler, _listener.remove_handler
-        screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
 
     append(callback)
     def remove_():
