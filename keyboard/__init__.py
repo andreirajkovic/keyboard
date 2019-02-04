@@ -256,13 +256,13 @@ class _KeyboardListener(_GenericListener):
         for key_hook in self.blocking_keys[scan_code]:
             if not key_hook(event):
                 return False
-            else:
-                screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
+                
 
         # Default accept.
         accept = True
 
         if self.blocking_hotkeys:
+            screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
             if self.filtered_modifiers[scan_code]:
                 origin = 'modifier'
                 modifiers_to_update = set([scan_code])
