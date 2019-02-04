@@ -498,7 +498,7 @@ def hook(callback, suppress=False, on_remove=lambda: None):
         append, remove = _listener.add_handler, _listener.remove_handler
 
     append(callback)
-    screenshot("%s.png" % time._time(), region=CG.CGRectMake(425, 47, 547, 326))
+    screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
     def remove_():
         del _hooks[callback]
         del _hooks[remove_]
