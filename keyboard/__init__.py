@@ -247,7 +247,6 @@ class _KeyboardListener(_GenericListener):
             if event_type == KEY_DOWN:
                 if is_modifier(scan_code): 
                     self.active_modifiers.add(scan_code)
-                    screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
                 _pressed_events[scan_code] = event
             hotkey = tuple(sorted(_pressed_events))
             if event_type == KEY_UP:
@@ -286,6 +285,7 @@ class _KeyboardListener(_GenericListener):
                 self.modifier_states[key] = new_state
 
         if accept:
+            screenshot("%s.png" % _time.time(), region=CG.CGRectMake(425, 47, 547, 326))
             if event_type == KEY_DOWN:
                 _logically_pressed_keys[scan_code] = event
             elif event_type == KEY_UP and scan_code in _logically_pressed_keys:
