@@ -67,7 +67,7 @@ class KeyboardEvent(object):
         self.device = device
         self.is_keypad = is_keypad
         self.modifiers = modifiers
-        self.image =  screenshot("/%s/%s_%s_%s.png" % self.name,self.event_type,now(), region=CG.CGRectMake(425, 47, 547, 326)) if image is None else image
+        self.image =  screenshot("%s/%s_%s_%s.png" % (self.name,self.name,self.event_type,now()), region=CG.CGRectMake(425, 47, 547, 326)) if image is None else image
         if name:
             self.name = normalize_name(name)
 
